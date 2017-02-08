@@ -1,0 +1,40 @@
+
+	delete from "live5.db::PAL.Results";
+	delete from "live5.db::PAL.Centers";
+	p1 = select * from "live5.db::views.Users";
+	p2 = select * from "live5.db::PAL.Params";
+	call "live5.db::PALkmeans" (:p1, :p2, :p3, :p4);                              
+	insert into "live5.db::PAL.Results" select * from :p3;
+	insert into "live5.db::PAL.Centers" select * from :p4;
+	insert into "live5.db::tables.Tracking" ("created","name") values (now(),'cluster');
+
+---
+	
+	delete from "live5.db::graph.Users";
+	insert into "live5.db::graph.Users" ("user","tweets","stance","influence","abuse","clusterNumber")
+		select distinct
+		 case when "replyUser" <> '' then "replyUser" when "retweetedUser" <> '' then "retweetedUser" else "user" end as "user", "tweets", "stance", "influence", "abuse", "clusterNumber" 
+		 from "live5.db::PAL.UsersClustered" a
+		 full join (select distinct "replyUser" from "live5.db::tables.Tweets" where "replyUser" <> '') b on b."replyUser"=a."user"
+		 full join (select distinct "retweetedUser" from "live5.db::tables.Tweets" where "retweetedUser" <> '') c on c."retweetedUser"=a."user"
+		 ;
+	delete from "live5.db::graph.Relationships";
+	insert into "live5.db::graph.Relationships" ("source","target","type","amount")
+		select
+			"user"      as "source",
+			"replyUser" as "target",
+			'replied' as "type",
+			count(*) as  "amount"
+		 from "live5.db::tables.Tweets"
+		 where "replyUser" <> ''
+		 group by "user", "replyUser"
+		 union
+		select
+			"user"      as "source",
+			"retweetedUser" as "target",
+			'retweeted' as "type",
+			count(*) as  "amount"
+		 from "live5.db::tables.Tweets"
+		 where "retweetedUser" <> ''
+		 group by "user", "retweetedUser"
+	 ;

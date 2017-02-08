@@ -1,0 +1,223 @@
+namespace live5.db;
+
+using "live5.db::tables.Tweets" as Tweets;
+using "$TA_live5.db::TATweets" as TATweets;
+
+context views {
+   view TweetsCleaned as
+      select from TATweets as ta
+      inner join  Tweets as t    on
+         (
+            t.id = ta.id
+         )
+      {
+         t.id,
+         max(replace(text, TA_TOKEN, '*****')) as text
+      }
+      where
+         TA_TYPE in ('UNAMBIGUOUS_PROFANITY', 'AMBIGUOUS_PROFANITY')
+      group by
+         t.id;
+
+   view AllTweetsCleaned as
+      select from Tweets as t
+      left join   TweetsCleaned as tc on
+         (
+            tc.id = t.id
+         )
+      {
+         t.id,
+         t.user,
+         case
+            when tc.text is not null then tc.text
+            else                          t.text
+         end     as text
+      };
+
+   view UsersLatest as
+      select from    AllTweetsCleaned as a
+      inner join (
+         select from Tweets
+         {
+            user,
+            cast(count(*) as integer) as tweets,
+            max(id) as                   id
+         }
+         group by
+            user
+      ) as b                               on
+             b.user = a.user
+         and b.id   = a.id
+      {
+         a.user,
+         b.tweets,
+         a.text
+      };
+
+   view TweetsTATYPE as
+      select from TATweets
+      {
+         id,
+         TA_TYPE,
+         count(*) as total
+      }
+      where
+         TA_TYPE in ('StrongPositiveSentiment', 'WeakPositiveSentiment', 'WeakNegativeSentiment', 'StrongNegativeSentiment', 'AMBIGUOUS_PROFANITY', 'UNAMBIGUOUS_PROFANITY')
+      group by
+         id,
+         TA_TYPE;
+
+   view TweetsTATYPECounts as
+      select from TweetsTATYPE
+      {
+         id,
+         sum(
+         case
+            TA_TYPE when 'StrongPositiveSentiment' then total
+         end) as SP,
+         sum(
+         case
+            TA_TYPE when 'WeakPositiveSentiment' then total
+         end) as WP,
+         sum(
+         case
+            TA_TYPE when 'WeakNegativeSentiment' then total
+         end) as WN,
+         sum(
+         case
+            TA_TYPE when 'StrongNegativeSentiment' then total
+         end) as SN,
+         sum(
+         case
+            TA_TYPE when 'AMBIGUOUS_PROFANITY' then total
+         end) as AP,
+         sum(
+         case
+            TA_TYPE when 'UNAMBIGUOUS_PROFANITY' then total
+         end) as UP
+      }
+      group by
+         id;
+
+   view TweetsTATYPESumCounts as
+      select from Tweets
+      left join   TweetsTATYPECounts on
+         TweetsTATYPECounts.id = Tweets.id
+      {
+         user,
+         sum(SP) as SP,
+         sum(WP) as WP,
+         sum(WN) as WN,
+         sum(SN) as SN,
+         sum(AP) as AP,
+         sum(UP) as UP
+      }
+      group by
+         user;
+
+   view TweetsRRC as
+      select from Tweets
+      {
+         replyUser,
+         count(*) as RRC
+      }
+      where
+         replyUser <> ''
+      group by
+         replyUser;
+
+   view TweetsRTRC as
+      select from Tweets
+      {
+         retweetedUser,
+         count(*) as RTRC
+      }
+      where
+         retweetedUser <> ''
+      group by
+         retweetedUser;
+
+   view TweetsRSC as
+      select from Tweets
+      {
+         user,
+         count(*) as RSC
+      }
+      where
+         replyUser <> ''
+      group by
+         user;
+
+   view TweetsRTSC as
+      select from Tweets
+      {
+         user,
+         count(*) as RTSC
+      }
+      where
+         retweetedUser <> ''
+      group by
+         user;
+
+   view Users as
+      select from UsersLatest
+      left join   TweetsTATYPESumCounts on
+         TweetsTATYPESumCounts.user = UsersLatest.user
+      left join   TweetsRRC             on
+         TweetsRRC.replyUser = UsersLatest.user
+      left join   TweetsRTRC            on
+         TweetsRTRC.retweetedUser = UsersLatest.user
+      left join   TweetsRSC             on
+         TweetsRSC.user = UsersLatest.user
+      left join   TweetsRTSC            on
+         TweetsRTSC.user = UsersLatest.user
+      {
+         UsersLatest.user,
+         tweets,
+         text,
+         cast((
+         case
+            when SP is null then 0
+            else                 SP * 5
+         end) +(
+         case
+            when WP is null then 0
+            else                 WP * 2
+         end) -(
+         case
+            when WN is null then 0
+            else                 WN * 2
+         end) -(
+         case
+            when SN is null then 0
+            else                 SN * 5
+         end) as int)      as stance,
+         cast(((
+         case
+            when RRC is null then 0
+            else                  RRC
+         end) +(
+         case
+            when RTRC is null then 0
+            else                   RTRC
+         end)) -((
+         case
+            when RSC is null then 0
+            else                  RSC
+         end) +(
+         case
+            when RTSC is null then 0
+            else                   RTSC
+         end)) as int)     as influence,
+         cast((
+         case
+            when AP is null then 0
+            else                 AP
+         end) +(
+         case
+            when UP is null then 0
+            else                 UP * 2
+         end) as int)      as abuse
+      };
+
+};

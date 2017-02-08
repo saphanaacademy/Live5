@@ -1,0 +1,6 @@
+FULLTEXT INDEX "live5.db::TATweets" ON "live5.db::tables.Tweets"("text") 
+	CONFIGURATION 'live5.db::voc'
+	LANGUAGE COLUMN "lang" 
+	LANGUAGE DETECTION ('EN','FR','DE','ES','ZH') 
+	TEXT ANALYSIS ON
+	;

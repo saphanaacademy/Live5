@@ -1,0 +1,9 @@
+"name","intArgs","doubleArgs","stringArgs"
+"THREAD_NUMBER",2,,
+"GROUP_NUMBER_MIN",5,,
+"GROUP_NUMBER_MAX",10,,
+"INIT_TYPE",4,,
+"DISTANCE_LEVEL",2,,
+"MAX_ITERATION",100,,
+"EXIT_THRESHOLD",,1.0E-6,
+"NORMALIZATION",0,,

@@ -1,0 +1,14 @@
+				<contentMiddle>
+	                <Label id="trackingLabel" design="bold"/>
+				</contentMiddle>
+				
+					<ObjectListItem type="{= ${device&gt;/system/phone} ? 'Active' : 'Inactive'}" press="onSelectionChange" title="Cluster {clusterNumber}" intro="Influence: {influence}, Stance: {stance}, Abuse: {abuse}" number="{ path: 'users' }" numberUnit="Users"></ObjectListItem>
+
+		<semantic:customFooterContent>
+			<OverflowToolbarButton icon="sap-icon://scatter-chart" tooltip="Perform Clustering" press="onClusterPress"/>
+			<OverflowToolbarButton icon="sap-icon://media-play" tooltip="Start Tracking" press="onStartPress"/>
+			<OverflowToolbarButton icon="sap-icon://media-pause" tooltip="Stop Tracking" press="onStopPress"/>
+			<OverflowToolbarButton icon="sap-icon://media-rewind" tooltip="Reset System" press="onResetPress"/>
+			<OverflowToolbarButton icon="sap-icon://study-leave" tooltip="SAP HANA Academy" press="onSHAPress"/>
+			<ToolbarSpacer/>
+		</semantic:customFooterContent>

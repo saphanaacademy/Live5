@@ -1,0 +1,14 @@
+
+	delete from "live5.db::tables.Tweets";
+	delete from "$TA_live5.db::TATweets";
+	insert into "live5.db::tables.Tracking" ("created","name") values (now(),'reset');
+
+---	
+	
+	delete from "live5.db::PAL.Results";
+	delete from "live5.db::PAL.Centers";
+
+---	
+	
+	delete from "live5.db::graph.Users";
+	delete from "live5.db::graph.Relationships";

@@ -1,0 +1,14 @@
+
+	"dependencies": {
+		"sap-xssec": "0.9.1",
+		"sap-xsenv": "1.2.4",
+		"sap-xsjs": "1.11.3",
+		"sap-hdbext": "4.2.0",
+		"sap-cds": "1.13.4",
+		"sap-textbundle": "2.0.4",
+		"sap-logging": "~2.0",
+		"express": "~4.14",
+		"passport": "~0.2.1",
+		"async": "latest",
+		"twitter": "1.7.0"
+	},

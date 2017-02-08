@@ -1,0 +1,24 @@
+
+			"mainService": {
+				"uri": "/services.xsodata/",
+
+---				
+				
+			"routes": [{
+			...
+			}, {
+				"pattern": "Clusters/{objectId}/User/{user}",
+				"name": "user",
+				"target": "user"
+			}],
+			
+			"targets": {
+			...
+				},
+				"user": {
+					"viewName": "User",
+					"viewId": "user",
+					"viewLevel": 3
+				},
+			...
+			}

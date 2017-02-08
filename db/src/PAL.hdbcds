@@ -1,0 +1,87 @@
+namespace live5.db;
+
+using "live5.db::views.Users" as Users;
+
+context PAL {
+   table type TTData {
+      user      : String(256);
+      stance    : Integer;
+      influence : Integer;
+      abuse     : Integer;
+   };
+   table type TTParams {
+      name       : String(100);
+      intArgs    : Integer;
+      doubleArgs : Double;
+      stringArgs : String(100);
+   };
+   table type TTResults {
+      user          : String(256);
+      clusterNumber : Integer;
+      distance      : Double;
+   };
+   table type TTCenters {
+      clusterNumber : Integer;
+      stance        : Double;
+      influence     : Double;
+      abuse         : Double;
+   };
+
+   entity Params {
+      name       : String(100) not null;
+      intArgs    : Integer;
+      doubleArgs : Double;
+      stringArgs : String(100);
+   };
+   entity Results {
+      user          : String(256) not null;
+      clusterNumber : Integer;
+      distance      : Double;
+   };
+   entity Centers {
+      clusterNumber : Integer not null;
+      stance        : Double;
+      influence     : Double;
+      abuse         : Double;
+   };
+
+   view UsersClustered as
+      select from Users
+      inner join  Results on
+         Results.user = Users.user
+      {
+         Users.user,
+         tweets,
+         text,
+         stance,
+         influence,
+         abuse,
+         clusterNumber + 1 as clusterNumber
+      };
+
+   view Clusters as
+      select from (
+         select from Centers
+         {
+            clusterNumber + 1                 as clusterNumber,
+            cast(round(stance) as integer)    as stance,
+            cast(round(influence) as integer) as influence,
+            cast(round(abuse) as integer)     as abuse
+         }
+      ) as CentersRounded
+      inner join     UsersClustered on
+         UsersClustered.clusterNumber = CentersRounded.clusterNumber
+      {
+         CentersRounded.clusterNumber,
+         CentersRounded.stance,
+         CentersRounded.influence,
+         CentersRounded.abuse,
+         count(*) as "users"
+      }
+      group by
+         CentersRounded.clusterNumber,
+         CentersRounded.stance,
+         CentersRounded.influence,
+         CentersRounded.abuse;
+
+};

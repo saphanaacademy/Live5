@@ -1,0 +1,3 @@
+GRAPH WORKSPACE "live5.db::graphw"
+EDGE TABLE "live5.db::graph.Relationships" SOURCE COLUMN "source" TARGET COLUMN "target" KEY COLUMN "key"
+VERTEX TABLE "live5.db::graph.Users" KEY COLUMN "user"

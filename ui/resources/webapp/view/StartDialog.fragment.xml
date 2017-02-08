@@ -1,0 +1,14 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog id="startDialog" title="Start Tracking" confirm="onConfirmStartDialog" class="sapUiPopupWithPadding">
+		<content>
+			<Label text="Track:"/>
+			<Input id="track"/>
+		</content>
+		<beginButton>
+			<Button text="Ok" id="ok" press="onCloseStartDialog"/>
+		</beginButton>
+		<endButton>
+			<Button text="Cancel" id="can" press="onCloseStartDialog"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

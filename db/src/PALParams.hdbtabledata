@@ -1,0 +1,23 @@
+{
+	"format_version": 1,
+	"imports":
+	[
+        {
+            "target_table": "live5.db::PAL.Params",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "live5.db::PALParams.csv",
+                "has_header": true,
+				"type_config" : { 
+					"delimiter" : ",", 
+					"do_quote" : true
+				} 
+            },
+            "import_settings": {
+                "import_columns": [
+					"name","intArgs","doubleArgs","stringArgs"
+				]
+            }
+        }
+	]
+}

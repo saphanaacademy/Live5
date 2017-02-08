@@ -1,0 +1,85 @@
+modules:
+ 
+ - name: uidev
+   type: html5
+   path: uidev
+   requires:
+    - name: live5uaa
+
+ resources:
+
+ - name: live5uaa
+   type: com.sap.xs.uaa
+   parameters:
+      path: ./xs-security.json
+
+---	  
+	  
+modules:
+ 
+ - name: uidev
+   type: html5
+   path: uidev
+   requires:
+    - name: live5uaa
+    - name: node_api
+      group: destinations
+      properties:
+       name: node_be
+       url: ~{service_url}
+       forwardAuthToken: true
+       
+- name: node
+   type: nodejs
+   path: node
+   requires:
+    - name: hdi-container
+    - name: live5uaa
+   provides:
+    - name: node_api
+      properties:
+        service_url: ${default-url}
+        
+---	  
+	  
+modules:
+ 
+ - name: uidev
+   type: html5
+   path: uidev
+   requires:
+    - name: live5uaa
+    - name: node_api
+      group: destinations
+      properties:
+       name: node_be
+       url: ~{service_url}
+       forwardAuthToken: true
+    - name: xsjs_api
+      group: destinations
+      properties:
+       name: xsjs_be
+       url: ~{service_url}
+       forwardAuthToken: true
+       
+- name: node
+   type: nodejs
+   path: node
+   requires:
+    - name: hdi-container
+    - name: live5uaa
+   provides:
+    - name: node_api
+      properties:
+        service_url: ${default-url}
+        
+ - name: xsjs
+   type: nodejs
+   path: xsjs
+   requires:
+    - name: hdi-container
+    - name: live5uaa
+   provides:
+    - name: xsjs_api
+      properties:
+        service_url: ${default-url}

@@ -1,0 +1,45 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:l="sap.ui.layout" xmlns="sap.m"	controllerName="live5.ui.controller.User">
+	<semantic:FullscreenPage id="page" title="{i18n&gt;userTitle}" showNavButton="true" navButtonPress="onNavBack" busy="{detailView&gt;/busy}"
+		busyIndicatorDelay="{detailView&gt;/delay}">
+		<semantic:content>
+			<Panel class="sapUiResponsiveMargin" width="auto" expandable="{device&gt;/system/phone}" expanded="true"
+				id="formPanel">
+				<content>
+					<l:VerticalLayout width="100%">
+						<PullToRefresh id="pullToRefresh" visible="{device&gt;/support/touch}" refresh="onRefresh"/>
+						<Label text="Direction:" id="lblDirection" labelFor="radioDirection" design="bold"/>
+						<RadioButtonGroup columns="3" id="radioDirection">
+							<buttons>
+								<RadioButton groupName="radioDirection" text="Outgoing" selected="true"/>
+								<RadioButton groupName="radioDirection" text="Incoming"/>
+								<RadioButton groupName="radioDirection" text="Any"/>
+							</buttons>
+						</RadioButtonGroup>
+						<Label text="Min Level:" id="lblMin" labelFor="sliderMin" design="bold"/>
+						<Slider id="sliderMin" min="0" max="10" value="1" enableTickmarks="true"/>
+						<Label text="Max Level:" id="lblMax" labelFor="sliderMax" design="bold"/>
+						<Slider id="sliderMax" min="0" max="10" value="2" enableTickmarks="true"/>
+						<Table id="userNeighborhoodList" width="auto" items="{/users}" noDataText="No Users">
+							<columns>
+								<Column>
+									<Label text="User"/>
+								</Column>
+								<Column hAlign="Right">
+									<Label text="Level"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier title="@{user}"/>
+										<ObjectNumber number="{DEPTH}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</l:VerticalLayout>
+				</content>
+			</Panel>
+		</semantic:content>
+	</semantic:FullscreenPage>
+</mvc:View>

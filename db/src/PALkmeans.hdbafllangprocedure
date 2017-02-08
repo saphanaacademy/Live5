@@ -1,0 +1,22 @@
+{ 
+  "area" : "AFLPAL", 
+  "function" : "KMEANS", 
+  "parameters" : [ 
+    { 
+      "type" : "live5.db::PAL.TTData", 
+      "direction" : "IN" 
+    }, 
+    { 
+      "type" : "live5.db::PAL.TTParams", 
+      "direction" : "IN" 
+    }, 
+    { 
+      "type" : "live5.db::PAL.TTResults", 
+      "direction" : "OUT" 
+    }, 
+    { 
+      "type" : "live5.db::PAL.TTCenters", 
+      "direction" : "OUT" 
+    } 
+  ]
+}

@@ -1,0 +1,3 @@
+			<ObjectHeader id="objectHeader" title="Cluster {clusterNumber} (Influence: {influence}, Stance: {stance}, Abuse: {abuse})" number="{ path: 'users'}" numberUnit="Users"></ObjectHeader>
+
+							<ObjectIdentifier title="@{user} (Influence: {influence}, Stance: {stance}, Abuse: {abuse})" text="{text}" titleActive="true" titlePress="onTitlePress"/>

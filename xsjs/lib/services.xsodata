@@ -1,0 +1,17 @@
+service namespace "live5.db" {
+    "live5.db::tables.Tweets" as "Tweets" 
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "live5.db::tables.Tracking" as "Tracking" 
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "live5.db::PAL.UsersClustered" as "UsersClustered" key ("user");
+    "live5.db::PAL.Clusters" as "Clusters" key ("clusterNumber") 
+        navigates ("Clusters2Users" as "Users");
+    association "Clusters2Users"
+        principal "Clusters"("clusterNumber") multiplicity "1" 
+        dependent "UsersClustered"("clusterNumber") multiplicity "*"
+        ;
+}

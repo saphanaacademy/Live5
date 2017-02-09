@@ -1,0 +1,19 @@
+xs login -u XSA_ADMIN
+xs target -s SAP
+
+xs set-env di-local-npm-registry HTTP_PROXY "http://proxy.company.domain:8080"
+xs set-env di-local-npm-registry HTTPS_PROXY "http://proxy.company.domain:8080"
+xs set-env di-local-npm-registry NO_PROXY "hostname,fully.qualified.host.name,127.0.0.1,localhost,localhost.localdomain"
+xs set-env di-core JBP_CONFIG_JAVA_OPTS '[java_opts: "-Dhttps.proxyHost=proxy.company.domain -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts=\\\"*.company.domain|localhost|127.0.0.1|10.*\\\""]'
+xs restage di-core
+xs restart di-core
+xs restart webide
+xs env di-core
+
+xs set-env di-local-npm-registry UPSTREAM_LINK "http://registry.npmjs.org/"
+xs restage di-local-npm-registry
+xs restart di-local-npm-registry
+xs env di-local-npm-registry
+
+xs srevg '{"TWITTER_CONSUMER_KEY":"","TWITTER_CONSUMER_SECRET":"","TWITTER_ACCESS_TOKEN_KEY":"-","TWITTER_ACCESS_TOKEN_SECRET":"","TWITTER_PROXY":""}'
+xs revg

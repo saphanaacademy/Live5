@@ -1,0 +1,3 @@
+"TA_TYPE"='UNAMBIGUOUS_PROFANITY'
+
+if(isnull("TA_TOKEN_1"), "TA_TOKEN", '*****')

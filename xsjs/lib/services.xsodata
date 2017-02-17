@@ -14,4 +14,7 @@ service namespace "live5.db" {
         principal "Clusters"("clusterNumber") multiplicity "1" 
         dependent "UsersClustered"("clusterNumber") multiplicity "*"
         ;
+	"live5.db::textAnalysis" as "textAnalysis"
+    	key generate local "id"  
+    	aggregates always;
 }

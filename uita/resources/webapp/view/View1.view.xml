@@ -1,0 +1,14 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:custom="live5.uita.control"
+	controllerName="live5.uita.controller.View1">
+	<App>
+		<pages>
+			<Page title="{i18n&gt;title}">
+				<content>
+					<PullToRefresh id="pullToRefresh" visible="{device&gt;/support/touch}" refresh="onRefresh"/>
+					<CheckBox text="Sentiment Only" id="isSentiment" selected="true" select="onSentimentSelect"/>
+					<custom:D3Chart id="D3Chart"/>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

@@ -1,0 +1,9 @@
+
+	"authenticationMethod": "route",
+
+	"routes": [{
+		"source": "^(.*)(.xs(js|odata))(.*)$",
+		"authenticationType": "xsuaa",
+		"scope": "$XSAPPNAME.USER",
+		"destination": "xsjs_be"
+	}]

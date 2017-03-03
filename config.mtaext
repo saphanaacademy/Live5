@@ -11,3 +11,6 @@ modules:
   - name: ui
     parameters:
       memory: 256M
+  - name: uita
+    parameters:
+      memory: 256M
